@@ -16,8 +16,9 @@ This document outlines a comprehensive plan for developing a fully functional, s
 - [x] Authorization middleware
 
 ## Next Steps
-- [ ] Authentication service
-- [ ] Authorization middleware
+- [ ] Implement API endpoints
+- [ ] Add rate limiting
+- [ ] Add logging middleware
 
 ## Milestone 1: Research and Planning
 
