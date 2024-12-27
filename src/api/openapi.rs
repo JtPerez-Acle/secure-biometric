@@ -5,23 +5,23 @@ use crate::api::{auth, projects, tasks, users, health};
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        auth::login,
-        auth::register,
-        projects::create_project,
-        projects::get_project,
-        projects::update_project,
-        projects::delete_project,
-        tasks::create_task,
-        tasks::get_task,
-        tasks::update_task,
-        tasks::delete_task,
-        users::get_user,
-        users::update_user,
-        health::health_check,
-        health::metrics
+        crate::api::auth::login,
+        crate::api::auth::register,
+        crate::api::projects::create_project,
+        crate::api::projects::get_project,
+        crate::api::projects::update_project,
+        crate::api::projects::delete_project,
+        crate::api::tasks::create_task,
+        crate::api::tasks::get_task,
+        crate::api::tasks::update_task,
+        crate::api::tasks::delete_task,
+        crate::api::users::get_user,
+        crate::api::users::update_user,
+        crate::api::health::health_check,
+        crate::api::health::metrics
     ),
     components(
-        schemas(User, Task, Project, Session, ApiKey)
+        schemas(crate::models::User, crate::models::Task, crate::models::Project, crate::models::Session, crate::models::ApiKey)
     ),
     tags(
         (name = "auth", description = "Authentication endpoints"),

@@ -1,6 +1,3 @@
-fn main() {
-    println!("Hello, world!");
-}
 mod api;
 mod middleware;
 mod models;

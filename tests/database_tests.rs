@@ -15,16 +15,19 @@ pub async fn setup_test_db() -> PgPool {
     if env::var("DATABASE_URL").is_err() {
         env::set_var("DATABASE_URL", "postgres://user:pass@localhost:5432/test_db");
     }
-    let config = DatabaseConfig::from_env();
-    let pool = config.create_pool().await.unwrap();
     
+    // Create a temporary connection to check if database exists
+    let conn = PgPool::connect(&env::var("DATABASE_URL").unwrap())
+        .await
+        .expect("Failed to connect to database");
+        
     // Run migrations
     sqlx::migrate!("./migrations")
-        .run(&pool)
+        .run(&conn)
         .await
         .expect("Failed to run migrations");
         
-    pool
+    conn
 }
 
 #[tokio::test]
