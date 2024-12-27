@@ -3,6 +3,7 @@ mod projects;
 mod tasks;
 mod users;
 mod health;
+mod openapi;
 
 use actix_web::web;
 use std::sync::Mutex;
@@ -19,5 +20,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 .configure(tasks::config)
                 .configure(users::config)
         )
-        .configure(health::config);
+        .configure(health::config)
+        .configure(openapi::config);
 }

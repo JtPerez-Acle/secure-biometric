@@ -18,9 +18,10 @@ This document outlines a comprehensive plan for developing a fully functional, s
 ## Next Steps
 - [x] Add health check endpoints
 - [x] Implement monitoring and metrics
-- [ ] Add API documentation
+- [x] Add API documentation
 - [ ] Add request tracing
 - [ ] Implement rate limiting per user
+- [ ] Add API versioning
 
 ## Milestone 1: Research and Planning
 
