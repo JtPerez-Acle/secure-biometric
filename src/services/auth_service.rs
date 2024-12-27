@@ -1,4 +1,4 @@
-use crate::models::User;
+use crate::models::{User, Task};
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
