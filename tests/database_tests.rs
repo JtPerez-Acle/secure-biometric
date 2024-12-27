@@ -78,6 +78,62 @@ async fn test_task_repository() {
 }
 
 #[sqlx::test]
+async fn test_project_repository() {
+    let pool = setup_test_db().await;
+    let user_repo = UserRepository::new(pool.clone());
+    let project_repo = ProjectRepository::new(pool.clone());
+
+    // Clean up before test
+    sqlx::query!("DELETE FROM projects").execute(&pool).await.unwrap();
+    sqlx::query!("DELETE FROM users").execute(&pool).await.unwrap();
+
+    // Create a user first
+    let user = User {
+        id: Uuid::new_v4(),
+        username: "projectuser".to_string(),
+        email: "project@example.com".to_string(),
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
+    };
+    user_repo.create(&user).await.unwrap();
+
+    let project = Project {
+        id: Uuid::new_v4(),
+        user_id: user.id,
+        name: "Test Project".to_string(),
+        description: Some("Test Description".to_string()),
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
+    };
+
+    // Test create
+    project_repo.create(&project).await.unwrap();
+
+    // Test find by id
+    let found_project = project_repo.find_by_id(project.id).await.unwrap();
+    assert!(found_project.is_some());
+    let found_project = found_project.unwrap();
+    assert_eq!(found_project.name, "Test Project");
+    assert_eq!(found_project.description, Some("Test Description".to_string()));
+
+    // Test find by user
+    let user_projects = project_repo.find_by_user(user.id).await.unwrap();
+    assert_eq!(user_projects.len(), 1);
+
+    // Test update
+    let mut updated_project = project;
+    updated_project.name = "Updated Project".to_string();
+    project_repo.update(&updated_project).await.unwrap();
+    let found_project = project_repo.find_by_id(updated_project.id).await.unwrap().unwrap();
+    assert_eq!(found_project.name, "Updated Project");
+
+    // Test delete
+    project_repo.delete(updated_project.id).await.unwrap();
+    let found_project = project_repo.find_by_id(updated_project.id).await.unwrap();
+    assert!(found_project.is_none());
+}
+
+#[sqlx::test]
 async fn test_user_repository() {
     let pool = setup_test_db().await;
     let repo = UserRepository::new(pool.clone());
