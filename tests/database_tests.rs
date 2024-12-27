@@ -5,11 +5,16 @@ use crate::repositories::{user_repository::UserRepository, task_repository::Task
                          api_key_repository::ApiKeyRepository};
 use chrono::Utc;
 use dotenvy::dotenv;
+use std::env;
 use sqlx::PgPool;
 use uuid::Uuid;
 
 pub async fn setup_test_db() -> PgPool {
     dotenvy::dotenv().ok();
+    // Set test database URL if not already set
+    if env::var("DATABASE_URL").is_err() {
+        env::set_var("DATABASE_URL", "postgres://user:pass@localhost:5432/test_db");
+    }
     let config = DatabaseConfig::from_env();
     let pool = config.create_pool().await.unwrap();
     
