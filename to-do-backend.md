@@ -16,9 +16,11 @@ This document outlines a comprehensive plan for developing a fully functional, s
 - [x] Authorization middleware
 
 ## Next Steps
+- [x] Add health check endpoints
+- [x] Implement monitoring and metrics
 - [ ] Add API documentation
-- [ ] Implement monitoring and metrics
-- [ ] Add health check endpoints
+- [ ] Add request tracing
+- [ ] Implement rate limiting per user
 
 ## Milestone 1: Research and Planning
 
