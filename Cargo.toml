@@ -29,4 +29,4 @@ actix-web = "4.0"
 actix-web-httpauth = "0.8"
 
 [dev-dependencies]
-sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-native-tls", "migrate", "offline"] }
+sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-native-tls", "migrate"] }
