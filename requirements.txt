@@ -1,0 +1,8 @@
+mediapipe>=0.10.20
+opencv-python>=4.10.0
+numpy>=1.26.4
+pandas>=1.5.3
+scipy>=1.11.0
+matplotlib>=3.8.0
+plotly>=5.18.0
+open3d>=0.17.0
