@@ -1,12 +1,8 @@
 use crate::models::ApiKey;
 use sqlx::PgPool;
-use thiserror::Error;
+use crate::error::{AppError, AppResult};
 
-#[derive(Error, Debug)]
-pub enum RepositoryError {
-    #[error("Database error: {0}")]
-    DatabaseError(#[from] sqlx::Error),
-}
+/// Repository for managing API keys in the database
 
 pub struct ApiKeyRepository {
     pool: PgPool,
@@ -17,7 +13,14 @@ impl ApiKeyRepository {
         Self { pool }
     }
 
-    pub async fn create(&self, api_key: &ApiKey) -> Result<(), RepositoryError> {
+    /// Creates a new API key in the database
+    /// 
+    /// # Arguments
+    /// * `api_key` - The API key to create
+    /// 
+    /// # Returns
+    /// `AppResult<()>` - Result indicating success or failure
+    pub async fn create(&self, api_key: &ApiKey) -> AppResult<()> {
         sqlx::query!(
             r#"
             INSERT INTO api_keys (id, user_id, key, created_at, expires_at)
@@ -35,7 +38,14 @@ impl ApiKeyRepository {
         Ok(())
     }
 
-    pub async fn find_by_key(&self, key: &str) -> Result<Option<ApiKey>, RepositoryError> {
+    /// Finds an API key by its key value
+    /// 
+    /// # Arguments
+    /// * `key` - The API key to search for
+    /// 
+    /// # Returns
+    /// `AppResult<Option<ApiKey>>` - The found API key or None if not found
+    pub async fn find_by_key(&self, key: &str) -> AppResult<Option<ApiKey>> {
         let api_key = sqlx::query_as!(
             ApiKey,
             r#"
@@ -51,7 +61,14 @@ impl ApiKeyRepository {
         Ok(api_key)
     }
 
-    pub async fn delete(&self, id: uuid::Uuid) -> Result<(), RepositoryError> {
+    /// Deletes an API key by its ID
+    /// 
+    /// # Arguments
+    /// * `id` - The ID of the API key to delete
+    /// 
+    /// # Returns
+    /// `AppResult<()>` - Result indicating success or failure
+    pub async fn delete(&self, id: uuid::Uuid) -> AppResult<()> {
         sqlx::query!(
             r#"
             DELETE FROM api_keys
@@ -65,7 +82,11 @@ impl ApiKeyRepository {
         Ok(())
     }
 
-    pub async fn delete_expired(&self) -> Result<(), RepositoryError> {
+    /// Deletes all expired API keys
+    /// 
+    /// # Returns
+    /// `AppResult<()>` - Result indicating success or failure
+    pub async fn delete_expired(&self) -> AppResult<()> {
         sqlx::query!(
             r#"
             DELETE FROM api_keys
