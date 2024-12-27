@@ -1,3 +1,12 @@
+[package]
+name = "secure-biometric"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "Secure biometric authentication system"
+license = "MIT"
+repository = "https://github.com/yourusername/secure-biometric"
+
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
