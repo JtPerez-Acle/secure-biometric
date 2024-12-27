@@ -3,6 +3,18 @@
 ## Overview
 This document outlines a comprehensive plan for developing a fully functional, secure, and scalable Rust-based blockchain wallet. The plan is structured around seven milestones and includes detailed implementation steps, testing methodologies, and deployment strategies.
 
+## Completed
+- [x] Database configuration
+- [x] User model and repository
+- [x] Task model and repository
+- [x] Project model and repository
+- [x] Database migrations
+- [x] Integration tests
+
+## Next Steps
+- [ ] Session model and repository
+- [ ] API Key model and repository
+
 ## Milestone 1: Research and Planning
 
 ### Goals
