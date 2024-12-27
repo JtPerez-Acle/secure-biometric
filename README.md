@@ -1,41 +1,98 @@
 # Secure Biometric Analysis System
 
-A robust biometric analysis system for capturing, processing, and analyzing facial biometric data with a focus on security and accuracy.
+A robust biometric authentication and analysis system combining a high-performance Rust web service with advanced Python-based biometric processing capabilities.
 
 ## Overview
 
-This project implements a comprehensive biometric analysis pipeline that processes facial data using advanced computer vision techniques. It includes features for real-time capture, depth analysis, mesh generation, and security validation.
+This project implements a secure biometric authentication system with real-time facial analysis capabilities. It features a Rust-based web service for handling authentication and API requests, coupled with a Python backend for sophisticated biometric processing.
 
 ## Architecture
 
 ```mermaid
 graph TD
-    A[Input Stream] --> B[Capture Module]
-    B --> C[Analysis Pipeline]
-    C --> D[Feature Extraction]
-    C --> E[Depth Analysis]
-    C --> F[Mesh Generation]
-    D --> G[Security Validation]
-    E --> G
-    F --> G
-    G --> H[Results Visualization]
-    G --> I[Session Storage]
+    subgraph "Rust Web Service"
+        A[HTTP Server] --> B[Rate Limiter]
+        B --> C[Auth Middleware]
+        C --> D[API Routes]
+        D --> E[Services Layer]
+        E --> F[Repositories]
+        F --> G[PostgreSQL]
+    end
+
+    subgraph "Python Biometric Engine"
+        H[Biometric Pipeline] --> I[Feature Extraction]
+        H --> J[Depth Analysis]
+        H --> K[Mesh Generation]
+        I & J & K --> L[Authentication]
+        L --> M[Session Manager]
+    end
+
+    D --> H
+    M --> G
+```
+
+## System Components
+
+```mermaid
+classDiagram
+    class BiometricPipeline {
+        +run_capture_phase()
+        +run_full_pipeline()
+    }
+    
+    class BiometricAuthenticator {
+        +tolerance_thresholds
+        +load_profile()
+        +validate()
+    }
+    
+    class SessionManager {
+        +start_new_session()
+        +list_sessions()
+        +clean_session()
+    }
+    
+    class AuthService {
+        +create_token()
+        +validate_token()
+    }
+    
+    BiometricPipeline --> BiometricAuthenticator
+    BiometricPipeline --> SessionManager
+    AuthService --> SessionManager
 ```
 
 ## Key Features
 
-- Real-time biometric data capture
-- Advanced facial feature extraction
-- 3D depth analysis and mesh generation
-- Security validation and anti-spoofing
-- Session management and result visualization
-- Interactive analysis dashboard
+- **Secure Authentication**
+  - JWT-based authentication
+  - Rate limiting (100 requests/minute)
+  - Request logging and monitoring
+  
+- **Biometric Processing**
+  - Real-time facial feature extraction
+  - 3D depth analysis and mesh generation
+  - Configurable tolerance thresholds
+  - Anti-spoofing measures
+  
+- **Session Management**
+  - Secure session storage
+  - Session cleanup and maintenance
+  - Result visualization
 
 ## Technical Stack
 
-- **Computer Vision**: OpenCV, MediaPipe
+### Rust Components
+- **Web Framework**: Actix-web 4.0
+- **Database**: PostgreSQL with SQLx
+- **Authentication**: JWT (jsonwebtoken)
+- **API Documentation**: Utoipa with Swagger UI
+- **Monitoring**: Prometheus
+
+### Python Components
+- **Computer Vision**: MediaPipe
 - **3D Processing**: Open3D
-- **Data Processing**: NumPy, Pandas, SciPy
+- **Data Processing**: NumPy, Pandas
 - **Visualization**: Matplotlib, Plotly
 
 ## Project Structure
@@ -43,16 +100,20 @@ graph TD
 ```
 secure-biometric/
 ├── src/
-│   ├── biometric/
-│   │   ├── analysis/      # Core analysis components
-│   │   ├── auth/          # Authentication and security
-│   │   ├── capture/       # Data capture modules
-│   │   ├── utils/         # Utility functions
-│   │   └── visualization/ # Result visualization
-│   ├── config/            # Configuration files
-│   └── main.py           # Application entry point
-├── documentation/         # Project documentation
-└── requirements.txt      # Dependencies
+│   ├── api/              # API routes and handlers
+│   ├── middleware/       # Auth, logging, rate limiting
+│   ├── models/          # Database models
+│   ├── repositories/    # Database access layer
+│   ├── services/        # Business logic
+│   └── biometric/       # Python biometric processing
+│       ├── auth/        # Biometric authentication
+│       ├── pipeline/    # Processing pipeline
+│       ├── utils/       # Utilities
+│       └── visualization/ # Result visualization
+├── migrations/          # Database migrations
+├── tests/              # Integration and unit tests
+├── Cargo.toml          # Rust dependencies
+└── requirements.txt    # Python dependencies
 ```
 
 ## Installation
@@ -63,32 +124,51 @@ git clone https://github.com/yourusername/secure-biometric.git
 cd secure-biometric
 ```
 
-2. Install dependencies:
+2. Install Rust dependencies:
+```bash
+cargo build
+```
+
+3. Install Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage
-
-Run the main application:
+4. Set up environment variables:
 ```bash
-python src/main.py
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-The interactive menu provides options for:
-- Starting new analysis sessions
-- Listing existing sessions
-- Viewing session results
-- Managing session data
+5. Run database migrations:
+```bash
+cargo run --bin secure-biometric -- migrate
+```
 
-## Requirements
+## Development
 
-- Python 3.8+
-- See `requirements.txt` for complete list of dependencies
+1. Start the Rust web service:
+```bash
+cargo run
+```
+
+2. Run tests:
+```bash
+cargo test
+```
+
+## Configuration
+
+The system uses environment variables for configuration:
+- `DATABASE_URL`: PostgreSQL connection string
+- `JWT_SECRET`: Secret key for JWT token generation
+- `RUST_LOG`: Logging level (e.g., "debug", "info")
+
+See `.env.example` for all available options.
 
 ## License
 
-This project is licensed under the terms specified in the LICENSE file.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contributing
 

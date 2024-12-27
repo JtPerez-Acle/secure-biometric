@@ -1,4 +1,4 @@
-use crate::models::User;
+use crate::models::{User, Task};
 use sqlx::PgPool;
 use thiserror::Error;
 

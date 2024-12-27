@@ -1,6 +1,42 @@
 [package]
-name = "rust-process"
+name = "secure-biometric"
 version = "0.1.0"
 edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "Secure biometric authentication system"
+license = "MIT"
+repository = "https://github.com/yourusername/secure-biometric"
+
+[[bin]]
+name = "secure-biometric"
+path = "src/main.rs"
+
 
 [dependencies]
+serde = { version = "1.0", features = ["derive"] }
+prometheus = "0.13"
+utoipa = { version = "4.0", features = ["actix_extras"] }
+utoipa-swagger-ui = { version = "4.0", features = ["actix-web"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.0", features = ["v4", "serde"] }
+sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-native-tls", "migrate"] }
+dotenvy = "0.15"
+tokio = { version = "1.0", features = ["full"] }
+thiserror = "1.0"
+jsonwebtoken = "9.0"
+actix-web = "4.0"
+actix-web-httpauth = "0.8"
+log = "0.4"
+env_logger = "0.10"
+
+[dev-dependencies]
+sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-native-tls", "migrate"] }
+tokio = { version = "1.0", features = ["full"] }
+dotenvy = "0.15"
+actix-web = "4.0"
+actix-rt = "2.0"
+futures = "0.3"
+serde_json = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
