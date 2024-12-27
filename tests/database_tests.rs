@@ -7,12 +7,20 @@ use sqlx::PgPool;
 use uuid::Uuid;
 
 async fn setup_test_db() -> PgPool {
-    dotenv().ok();
+    dotenvy::dotenv().ok();
     let config = DatabaseConfig::from_env();
-    config.create_pool().await.unwrap()
+    let pool = config.create_pool().await.unwrap();
+    
+    // Run migrations
+    sqlx::migrate!()
+        .run(&pool)
+        .await
+        .expect("Failed to run migrations");
+        
+    pool
 }
 
-#[tokio::test]
+#[sqlx::test]
 async fn test_user_repository() {
     let pool = setup_test_db().await;
     let repo = UserRepository::new(pool.clone());
