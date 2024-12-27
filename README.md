@@ -230,6 +230,89 @@ graph LR
 
 > 🛠️ **Tech Choices**: Each technology was chosen for its specific strengths in handling biometric processing and secure authentication.
 
+## Testing Strategy
+
+Our testing approach ensures reliability across all system components:
+
+```mermaid
+graph TD
+    subgraph "Test Categories"
+        A[Testing Strategy] --> B[Unit Tests]
+        A --> C[Integration Tests]
+        A --> D[Performance Tests]
+        A --> E[Security Tests]
+    end
+
+    subgraph "Component Coverage"
+        B --> F[Rust Backend]
+        B --> G[Python Engine]
+        C --> H[API Integration]
+        C --> I[Database]
+        D --> J[Load Testing]
+        D --> K[Benchmarks]
+        E --> L[Security Scans]
+        E --> M[Penetration Tests]
+    end
+
+    style A fill:#f96,stroke:#333,stroke-width:2px
+    style B,C,D,E fill:#bbf,stroke:#333,stroke-width:2px
+    style F,G,H,I,J,K,L,M fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+### Test Coverage
+
+1. **Rust Service Tests** (`/rust-process/tests/`)
+   - API endpoints and authentication
+   - Database operations
+   - Middleware functionality
+   > 📘 Detailed documentation in [rust-process/README.md](rust-process/README.md#testing)
+
+2. **Python Engine Tests** (`/src/tests/`)
+   - Biometric processing pipeline
+   - Feature extraction accuracy
+   - Anti-spoofing measures
+
+3. **Integration Tests**
+   - End-to-end workflows
+   - Cross-component communication
+   - Data consistency
+
+4. **Performance Tests**
+   - Response time benchmarks
+   - Concurrent user simulation
+   - Resource utilization
+
+### Running Tests
+
+```mermaid
+flowchart LR
+    A[Start Testing] --> B[Configure Environment]
+    B --> C[Run Rust Tests]
+    B --> D[Run Python Tests]
+    C & D --> E[Generate Reports]
+    E --> F[Review Coverage]
+
+    style A fill:#f96,stroke:#333
+    style F fill:#6f9,stroke:#333
+```
+
+Quick test execution:
+```bash
+# Run all tests
+make test
+
+# Run specific components
+make test-rust
+make test-python
+
+# Run with coverage
+make coverage
+```
+
+For detailed testing documentation:
+- Rust service: See [rust-process/README.md](rust-process/README.md#testing)
+- Python engine: See [src/README.md](src/README.md#testing)
+
 ## Quick Start
 
 Getting started with development is straightforward:

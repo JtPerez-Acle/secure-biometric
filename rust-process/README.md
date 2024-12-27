@@ -211,6 +211,169 @@ cargo test
 - OpenAPI documentation: `http://localhost:8080/api/docs`
 - Health check: `http://localhost:8080/health`
 
+## Testing
+
+The project includes comprehensive test suites covering all major components. Tests are located in the `/tests` directory and follow a modular structure:
+
+```mermaid
+graph TD
+    A[Test Suite] --> B[auth_tests.rs]
+    A --> C[database_tests.rs]
+    A --> D[health_tests.rs]
+    A --> E[middleware_tests.rs]
+    A --> F[openapi_tests.rs]
+
+    B --> B1[Token Creation]
+    B --> B2[Token Validation]
+    B --> B3[Middleware Auth]
+
+    C --> C1[User Repository]
+    C --> C2[Task Repository]
+    C --> C3[Project Repository]
+    C --> C4[Session Repository]
+    C --> C5[API Key Repository]
+
+    D --> D1[Health Endpoints]
+    D --> D2[System Status]
+
+    E --> E1[Auth Middleware]
+    E --> E2[Rate Limiting]
+
+    F --> F1[API Documentation]
+    F --> F2[Swagger UI]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B,C,D,E,F fill:#bbf,stroke:#333,stroke-width:2px
+```
+
+### Test Coverage
+
+1. **Authentication Tests** (`auth_tests.rs`)
+   - JWT token creation and validation
+   - Token expiration handling
+   - Authentication middleware
+   - Error cases and invalid tokens
+
+2. **Database Tests** (`database_tests.rs`)
+   - Repository layer testing
+   - CRUD operations for all models:
+     - Users
+     - Tasks
+     - Projects
+     - Sessions
+     - API Keys
+   - Transaction handling
+   - Error conditions
+
+3. **Health Check Tests** (`health_tests.rs`)
+   - System health endpoint
+   - Database connectivity
+   - Service status reporting
+
+4. **Middleware Tests** (`middleware_tests.rs`)
+   - Authentication middleware
+   - Rate limiting functionality
+   - Request/Response processing
+
+5. **OpenAPI Tests** (`openapi_tests.rs`)
+   - API documentation endpoints
+   - Swagger UI availability
+   - Schema validation
+
+### Running Tests
+
+1. **Setup Test Database**
+```bash
+# Set up test database
+export DATABASE_URL=postgres://user:pass@localhost:5432/test_db
+# Run migrations
+cargo run -- migrate
+```
+
+2. **Run All Tests**
+```bash
+cargo test
+```
+
+3. **Run Specific Test Suite**
+```bash
+cargo test --test auth_tests
+cargo test --test database_tests
+```
+
+4. **Run with Logging**
+```bash
+RUST_LOG=debug cargo test
+```
+
+### Test Configuration
+
+The test suite uses a separate test database and configuration:
+
+```env
+DATABASE_URL=postgres://user:pass@localhost:5432/test_db
+JWT_SECRET=test_secret_key
+RUST_LOG=debug
+```
+
+### Integration Tests
+
+Integration tests ensure components work together correctly:
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Auth
+    participant DB
+    participant Service
+
+    Client->>Auth: Request with JWT
+    Auth->>Auth: Validate Token
+    Auth->>DB: Verify User
+    DB-->>Auth: User Valid
+    Auth->>Service: Forward Request
+    Service->>DB: Process Request
+    DB-->>Service: Return Data
+    Service-->>Client: Response
+```
+
+### Test Guidelines
+
+1. **Writing New Tests**
+   - Create test files in `/tests` directory
+   - Follow existing naming conventions
+   - Include both success and failure cases
+   - Add comprehensive assertions
+
+2. **Test Categories**
+   - Unit tests for individual functions
+   - Integration tests for component interaction
+   - End-to-end tests for complete flows
+   - Performance tests for critical paths
+
+3. **Best Practices**
+   - Use test database fixtures
+   - Clean up test data after each test
+   - Mock external services
+   - Test error conditions thoroughly
+
+4. **CI/CD Integration**
+   - Tests run on every pull request
+   - Coverage reports generated
+   - Performance benchmarks tracked
+
+### Monitoring Test Coverage
+
+```bash
+# Install cargo-tarpaulin
+cargo install cargo-tarpaulin
+
+# Generate coverage report
+cargo tarpaulin --out Html
+```
+
+View the coverage report in `target/tarpaulin/coverage.html`
+
 ## Configuration
 
 Environment variables:
