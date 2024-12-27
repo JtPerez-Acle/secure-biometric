@@ -134,6 +134,91 @@ async fn test_project_repository() {
 }
 
 #[sqlx::test]
+async fn test_session_repository() {
+    let pool = setup_test_db().await;
+    let user_repo = UserRepository::new(pool.clone());
+    let session_repo = SessionRepository::new(pool.clone());
+
+    // Clean up before test
+    sqlx::query!("DELETE FROM sessions").execute(&pool).await.unwrap();
+    sqlx::query!("DELETE FROM users").execute(&pool).await.unwrap();
+
+    // Create a user first
+    let user = User {
+        id: Uuid::new_v4(),
+        username: "sessionuser".to_string(),
+        email: "session@example.com".to_string(),
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
+    };
+    user_repo.create(&user).await.unwrap();
+
+    let session = Session {
+        id: Uuid::new_v4(),
+        user_id: user.id,
+        created_at: Utc::now(),
+        expires_at: Utc::now() + chrono::Duration::hours(1),
+    };
+
+    // Test create
+    session_repo.create(&session).await.unwrap();
+
+    // Test find by id
+    let found_session = session_repo.find_by_id(session.id).await.unwrap();
+    assert!(found_session.is_some());
+    let found_session = found_session.unwrap();
+    assert_eq!(found_session.user_id, user.id);
+
+    // Test delete
+    session_repo.delete(session.id).await.unwrap();
+    let found_session = session_repo.find_by_id(session.id).await.unwrap();
+    assert!(found_session.is_none());
+}
+
+#[sqlx::test]
+async fn test_api_key_repository() {
+    let pool = setup_test_db().await;
+    let user_repo = UserRepository::new(pool.clone());
+    let api_key_repo = ApiKeyRepository::new(pool.clone());
+
+    // Clean up before test
+    sqlx::query!("DELETE FROM api_keys").execute(&pool).await.unwrap();
+    sqlx::query!("DELETE FROM users").execute(&pool).await.unwrap();
+
+    // Create a user first
+    let user = User {
+        id: Uuid::new_v4(),
+        username: "apikeyuser".to_string(),
+        email: "apikey@example.com".to_string(),
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
+    };
+    user_repo.create(&user).await.unwrap();
+
+    let api_key = ApiKey {
+        id: Uuid::new_v4(),
+        user_id: user.id,
+        key: "test-key".to_string(),
+        created_at: Utc::now(),
+        expires_at: Utc::now() + chrono::Duration::hours(1),
+    };
+
+    // Test create
+    api_key_repo.create(&api_key).await.unwrap();
+
+    // Test find by key
+    let found_api_key = api_key_repo.find_by_key(&api_key.key).await.unwrap();
+    assert!(found_api_key.is_some());
+    let found_api_key = found_api_key.unwrap();
+    assert_eq!(found_api_key.user_id, user.id);
+
+    // Test delete
+    api_key_repo.delete(api_key.id).await.unwrap();
+    let found_api_key = api_key_repo.find_by_key(&api_key.key).await.unwrap();
+    assert!(found_api_key.is_none());
+}
+
+#[sqlx::test]
 async fn test_user_repository() {
     let pool = setup_test_db().await;
     let repo = UserRepository::new(pool.clone());

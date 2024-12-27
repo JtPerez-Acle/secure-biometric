@@ -8,12 +8,14 @@ This document outlines a comprehensive plan for developing a fully functional, s
 - [x] User model and repository
 - [x] Task model and repository
 - [x] Project model and repository
+- [x] Session model and repository
+- [x] API Key model and repository
 - [x] Database migrations
 - [x] Integration tests
 
 ## Next Steps
-- [ ] Session model and repository
-- [ ] API Key model and repository
+- [ ] Authentication service
+- [ ] Authorization middleware
 
 ## Milestone 1: Research and Planning
 
