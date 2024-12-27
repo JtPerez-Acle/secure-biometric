@@ -1,18 +1,20 @@
 use crate::config::database::DatabaseConfig;
-use crate::models::User;
-use crate::repositories::user_repository::UserRepository;
+use crate::models::{User, Task, Project, Session, ApiKey};
+use crate::repositories::{user_repository::UserRepository, task_repository::TaskRepository, 
+                         project_repository::ProjectRepository, session_repository::SessionRepository,
+                         api_key_repository::ApiKeyRepository};
 use chrono::Utc;
 use dotenvy::dotenv;
 use sqlx::PgPool;
 use uuid::Uuid;
 
-async fn setup_test_db() -> PgPool {
+pub async fn setup_test_db() -> PgPool {
     dotenvy::dotenv().ok();
     let config = DatabaseConfig::from_env();
     let pool = config.create_pool().await.unwrap();
     
     // Run migrations
-    sqlx::migrate!()
+    sqlx::migrate!("./migrations")
         .run(&pool)
         .await
         .expect("Failed to run migrations");
@@ -20,7 +22,7 @@ async fn setup_test_db() -> PgPool {
     pool
 }
 
-#[sqlx::test]
+#[tokio::test]
 async fn test_task_repository() {
     let pool = setup_test_db().await;
     let user_repo = UserRepository::new(pool.clone());
@@ -77,7 +79,7 @@ async fn test_task_repository() {
     assert!(found_task.is_none());
 }
 
-#[sqlx::test]
+#[tokio::test]
 async fn test_project_repository() {
     let pool = setup_test_db().await;
     let user_repo = UserRepository::new(pool.clone());
@@ -133,7 +135,7 @@ async fn test_project_repository() {
     assert!(found_project.is_none());
 }
 
-#[sqlx::test]
+#[tokio::test]
 async fn test_session_repository() {
     let pool = setup_test_db().await;
     let user_repo = UserRepository::new(pool.clone());
@@ -175,7 +177,7 @@ async fn test_session_repository() {
     assert!(found_session.is_none());
 }
 
-#[sqlx::test]
+#[tokio::test]
 async fn test_api_key_repository() {
     let pool = setup_test_db().await;
     let user_repo = UserRepository::new(pool.clone());
@@ -218,7 +220,7 @@ async fn test_api_key_repository() {
     assert!(found_api_key.is_none());
 }
 
-#[sqlx::test]
+#[tokio::test]
 async fn test_user_repository() {
     let pool = setup_test_db().await;
     let repo = UserRepository::new(pool.clone());
