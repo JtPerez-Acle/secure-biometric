@@ -12,6 +12,8 @@ This document outlines a comprehensive plan for developing a fully functional, s
 - [x] API Key model and repository
 - [x] Database migrations
 - [x] Integration tests
+- [x] Authentication service
+- [x] Authorization middleware
 
 ## Next Steps
 - [ ] Authentication service
