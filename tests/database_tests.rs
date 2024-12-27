@@ -21,6 +21,63 @@ async fn setup_test_db() -> PgPool {
 }
 
 #[sqlx::test]
+async fn test_task_repository() {
+    let pool = setup_test_db().await;
+    let user_repo = UserRepository::new(pool.clone());
+    let task_repo = TaskRepository::new(pool.clone());
+
+    // Clean up before test
+    sqlx::query!("DELETE FROM tasks").execute(&pool).await.unwrap();
+    sqlx::query!("DELETE FROM users").execute(&pool).await.unwrap();
+
+    // Create a user first
+    let user = User {
+        id: Uuid::new_v4(),
+        username: "taskuser".to_string(),
+        email: "task@example.com".to_string(),
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
+    };
+    user_repo.create(&user).await.unwrap();
+
+    let task = Task {
+        id: Uuid::new_v4(),
+        user_id: user.id,
+        title: "Test Task".to_string(),
+        description: Some("Test Description".to_string()),
+        completed: false,
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
+    };
+
+    // Test create
+    task_repo.create(&task).await.unwrap();
+
+    // Test find by id
+    let found_task = task_repo.find_by_id(task.id).await.unwrap();
+    assert!(found_task.is_some());
+    let found_task = found_task.unwrap();
+    assert_eq!(found_task.title, "Test Task");
+    assert_eq!(found_task.description, Some("Test Description".to_string()));
+
+    // Test find by user
+    let user_tasks = task_repo.find_by_user(user.id).await.unwrap();
+    assert_eq!(user_tasks.len(), 1);
+
+    // Test update
+    let mut updated_task = task;
+    updated_task.title = "Updated Task".to_string();
+    task_repo.update(&updated_task).await.unwrap();
+    let found_task = task_repo.find_by_id(updated_task.id).await.unwrap().unwrap();
+    assert_eq!(found_task.title, "Updated Task");
+
+    // Test delete
+    task_repo.delete(updated_task.id).await.unwrap();
+    let found_task = task_repo.find_by_id(updated_task.id).await.unwrap();
+    assert!(found_task.is_none());
+}
+
+#[sqlx::test]
 async fn test_user_repository() {
     let pool = setup_test_db().await;
     let repo = UserRepository::new(pool.clone());

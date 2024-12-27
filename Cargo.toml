@@ -11,6 +11,10 @@ repository = "https://github.com/yourusername/secure-biometric"
 name = "secure-biometric"
 path = "src/main.rs"
 
+[lib]
+name = "secure_biometric"
+path = "src/lib.rs"
+
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
