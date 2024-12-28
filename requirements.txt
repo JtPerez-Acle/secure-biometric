@@ -6,3 +6,6 @@ scipy>=1.11.0
 matplotlib>=3.8.0
 plotly>=5.18.0
 open3d>=0.17.0
+chromadb>=0.4.15
+sentence-transformers>=2.2.2
+langchain>=0.0.340
