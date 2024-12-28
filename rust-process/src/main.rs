@@ -4,6 +4,7 @@ mod models;
 mod repositories;
 mod services;
 mod config;
+mod rag;
 
 use actix_web::{web, App, HttpServer};
 use crate::config::database::DatabaseConfig;

@@ -29,6 +29,10 @@ actix-web = "4.0"
 actix-web-httpauth = "0.8"
 log = "0.4"
 env_logger = "0.10"
+rust-bert = "0.19.0"
+qdrant = "1.0.0"
+openai = "0.3.0"
+tiktoken = "0.4.0"
 
 [dev-dependencies]
 sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio-native-tls", "migrate"] }
