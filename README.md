@@ -2,10 +2,10 @@
 
 <div align="center">
 
-[![Project Status: Active](https://img.shields.io/badge/Project%20Status-Under%20Development-yellow.svg)]()
-[License: Licensed]
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
+[![Project Status: Under Development](https://img.shields.io/badge/Project%20Status-Under%20Development-yellow.svg)]()
+[![License: Custom License](https://img.shields.io/badge/License-Custom%20License-blue.svg)](LICENSE.md)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Rust 1.70+](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 
 *A state-of-the-art biometric analysis system combining Python's computer vision capabilities with Rust's secure processing engine*
 
