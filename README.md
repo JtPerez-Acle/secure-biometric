@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Project Status: Active](https://img.shields.io/badge/Project%20Status-Under%20Development-yellow.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Licensed](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Rust](https://img.shields.io/badge/Rust-1.70+-orange.svg)](https://www.rust-lang.org/)
 
