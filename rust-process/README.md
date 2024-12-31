@@ -22,7 +22,7 @@ A high-performance, secure storage system for biometric templates built in Rust.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/secure-biometric
+git clone https://github.com/JtPerez-Acle/secure-biometric
 cd secure-biometric/rust-process
 
 # Build the project
